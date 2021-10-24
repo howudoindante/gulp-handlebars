@@ -16,7 +16,6 @@ const gulpHandlebars = require('gulp-handlebars-html')(handlebars);
 
 const routes = {
     source: {
-        html: path.join(__dirname, source_folder, "pages/") + "*.html",
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
         hbscomp: path.join(__dirname, source_folder, "components/**/") + "*.hbs",
         scss: path.join(__dirname, source_folder) + "styles/**/*.scss",
@@ -29,10 +28,10 @@ const routes = {
         js: path.join(__dirname, destination_folder) + "js/",
     },
     watch: {
-        html: path.join(__dirname, source_folder, "pages/") + "*.html",
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
         hbscomp: path.join(__dirname, source_folder, "components/**/") + "*.hbs",
         scss: path.join(__dirname, source_folder) + "styles/**/*.scss",
+        scssComp: path.join(__dirname, source_folder) + "components/**/*.scss",
         js: path.join(__dirname, source_folder) + "scripts/**/*.js",
     }
 }
@@ -44,15 +43,10 @@ function BSYNC() {
         port: 3000
     })
 }
-function HTML() {
-    return src(routes.source.html)
-        .pipe(dest(routes.build.html))
-        .pipe(browsersync.stream());
-}
 
 function HBS() {
     var templateData = {
-        firstName: 'Kaanon'
+        firstName: 'Your variables goes here'
     },
         options = {
             partialsDirectory: ["./src/components/"]
@@ -81,8 +75,7 @@ function SCSS() {
 
 
 function WATCH() {
-    // gulp_watch([routes.watch.html], HTML);
-    gulp_watch([routes.watch.scss], SCSS);
+    gulp_watch([routes.watch.scss, routes.watch.scssComp], SCSS);
     gulp_watch([routes.watch.js], JS);
     gulp_watch([routes.watch.hbspages, routes.watch.hbscomp], HBS);
 }
