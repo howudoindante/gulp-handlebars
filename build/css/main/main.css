@@ -1,0 +1,11 @@
+.structure {
+  font-style: italic;
+  font-size: 11px;
+  color: cadetblue;
+}
+
+.tags {
+  font-size: 22px;
+  color: green;
+  letter-spacing: -0.5px;
+}
