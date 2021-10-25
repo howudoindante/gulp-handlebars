@@ -30,19 +30,23 @@ let jsonData = require('./src/data/login/data2.json')
 const routes = {
     source: {
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
-        hbscomp: path.join(__dirname, source_folder, "components/**/") + "*.hbs",
+        hbscomp: path.join(__dirname, source_folder, "components/**/*.hbs"),
         scss: path.join(__dirname, source_folder) + "styles/**/*.scss",
         js: [
-            path.join(__dirname, source_folder) + "scripts/**/*.js"
-            , "!" + path.join(__dirname, source_folder) + "scripts/**/_*.js"
+            path.join(__dirname, source_folder, "scripts/**/*.js")
+            , "!" + path.join(__dirname, source_folder, "scripts/**/_*.js")
         ],
-        json: path.join(__dirname, source_folder, "data/**/") + "*.json"
+        json: path.join(__dirname, source_folder, "data/**/*.json"),
+        fonts: path.join(__dirname, source_folder, "assets/fonts/**"),
+        img: path.join(__dirname, source_folder, "assets/img/**"),
     },
     build: {
         directory: path.join(__dirname, destination_folder),
         html: path.join(__dirname, destination_folder),
-        css: path.join(__dirname, destination_folder) + "css/",
-        js: path.join(__dirname, destination_folder) + "js/",
+        css: path.join(__dirname, destination_folder, "css/"),
+        js: path.join(__dirname, destination_folder, "js/"),
+        fonts: path.join(__dirname, destination_folder, "assets/fonts/"),
+        img: path.join(__dirname, destination_folder, "assets/img/"),
     },
     watch: {
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
@@ -50,6 +54,8 @@ const routes = {
         scss: path.join(__dirname, source_folder) + "styles/**/*.scss",
         scssComp: path.join(__dirname, source_folder) + "components/**/*.scss",
         js: path.join(__dirname, source_folder) + "scripts/**/*.js",
+        fonts: path.join(__dirname, source_folder, "assets/fonts/**"),
+        img: path.join(__dirname, source_folder, "assets/img/**"),
     },
 };
 
@@ -118,11 +124,23 @@ function SCSS() {
 
         .pipe(browsersync.stream());
 }
+function FONTS() {
+    return src(routes.source.fonts)
+        .pipe(dest(routes.build.fonts))
+        .pipe(browsersync.stream());
+}
+function IMG() {
+    return src(routes.source.img)
+        .pipe(dest(routes.build.img))
+        .pipe(browsersync.stream());
+}
 
 function WATCH() {
     gulp_watch([routes.watch.scss, routes.watch.scssComp], SCSS);
     gulp_watch([routes.watch.js], JAVASCRIPT);
     gulp_watch([routes.watch.hbspages, routes.watch.hbscomp], HBS);
+    gulp_watch([routes.watch.img], IMG);
+    gulp_watch([routes.watch.fonts], FONTS);
 }
 
 function JAVASCRIPT() {
@@ -146,12 +164,14 @@ async function CLEAN() {
     await del.sync([routes.build.directory]);
 }
 
-const BUILD = series(CLEAN, SCSS, JAVASCRIPT, HBS);
+const BUILD = series(CLEAN, SCSS, JAVASCRIPT, HBS, FONTS, IMG);
 
 
 const TASKS = parallel(BUILD, WATCH, BSYNC);
 
 exports.HBS = HBS;
+exports.FONTS = FONTS;
+exports.IMG = IMG;
 exports.SCSS = SCSS;
 exports.JAVASCRIPT = JAVASCRIPT;
 exports.BUILD = BUILD;
