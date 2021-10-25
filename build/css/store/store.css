@@ -1,16 +1,2 @@
-.header {
-  background-color: burlywood;
-  font-size: 30px;
-}
-
-.structure {
-  font-style: italic;
-  font-size: 11px;
-  color: cadetblue;
-}
-
-.tags {
-  font-size: 22px;
-  color: green;
-  letter-spacing: -0.5px;
-}
+.header{background-color:#deb887;font-size:30px}.structure{font-style:italic;font-size:11px;color:#5f9ea0}.tags{font-size:22px;color:green;letter-spacing:-.5px}
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0b3JlL2luZGV4LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLDJCQUEyQjtFQUMzQixlQUFlO0FBQ2pCOztBQUVBO0VBQ0Usa0JBQWtCO0VBQ2xCLGVBQWU7RUFDZixnQkFBZ0I7QUFDbEI7O0FBRUE7RUFDRSxlQUFlO0VBQ2YsWUFBWTtFQUNaLHNCQUFzQjtBQUN4QiIsImZpbGUiOiJzdG9yZS9pbmRleC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuaGVhZGVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogYnVybHl3b29kO1xuICBmb250LXNpemU6IDMwcHg7XG59XG5cbi5zdHJ1Y3R1cmUge1xuICBmb250LXN0eWxlOiBpdGFsaWM7XG4gIGZvbnQtc2l6ZTogMTFweDtcbiAgY29sb3I6IGNhZGV0Ymx1ZTtcbn1cblxuLnRhZ3Mge1xuICBmb250LXNpemU6IDIycHg7XG4gIGNvbG9yOiBncmVlbjtcbiAgbGV0dGVyLXNwYWNpbmc6IC0wLjVweDtcbn0iXX0= */

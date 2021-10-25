@@ -20,7 +20,13 @@ const browserify = require("browserify");
 const buffer = require('vinyl-buffer');
 
 const gulpPlumber = require("gulp-plumber");
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require("gulp-uglify");
+const gulpif = require('gulp-if');
+const autoprefixer = require("gulp-autoprefixer");
+const cssmin = require("gulp-cssmin");
 
+let jsonData = require('./src/data/login/data2.json')
 const routes = {
     source: {
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
@@ -29,7 +35,8 @@ const routes = {
         js: [
             path.join(__dirname, source_folder) + "scripts/**/*.js"
             , "!" + path.join(__dirname, source_folder) + "scripts/**/_*.js"
-        ]
+        ],
+        json: path.join(__dirname, source_folder, "data/**/") + "*.json"
     },
     build: {
         directory: path.join(__dirname, destination_folder),
@@ -68,18 +75,17 @@ function BSYNC() {
         ],
         port: 3000,
         open: false,
-        notify: false
     });
 }
 
 function HBS() {
     var templateData = {
         firstName: "Your variables goes here",
+        json: jsonData
     },
         options = {
             partialsDirectory: ["./src/components/"],
         };
-
     return src(routes.source.hbspages)
         .pipe(gulpHandlebars(templateData, options))
         .on('error', console.error)
@@ -95,12 +101,21 @@ function HBS() {
 function SCSS() {
     return src(routes.source.scss)
         .pipe(scss().on('error', scss.logError))
+        .pipe(gulpif(isDev, sourcemaps.init()))
+        .pipe(autoprefixer({
+            cascade: false
+        }))
+        .pipe(cssmin())
+        .pipe(gulpif(isDev, sourcemaps.write()))
         .pipe(
             rename(function (path) {
                 path.basename = path.dirname;
             })
         )
         .pipe(dest(routes.build.css))
+
+
+
         .pipe(browsersync.stream());
 }
 
@@ -113,11 +128,14 @@ function WATCH() {
 function JAVASCRIPT() {
     return src(routes.source.js, { read: false })
         .pipe(tap(function (file) {
-            file.contents = browserify(file.path, { debug: true }).transform("babelify").bundle()
+            file.contents = browserify(file.path, { debug: isDev }).transform("babelify").bundle()
             file.basename = file.dirname.split("\\")[file.dirname.split("\\").length - 1] + ".js";
         }))
         .pipe(gulpPlumber())
         .pipe(buffer())
+        .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
+        .pipe(uglify())
+        .pipe(gulpif(isDev, sourcemaps.write()))
         .pipe(dest(routes.build.js))
         .on("error", console.log)
         .pipe(browsersync.stream());
