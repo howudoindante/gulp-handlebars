@@ -25,8 +25,6 @@ const uglify = require("gulp-uglify");
 const gulpif = require('gulp-if');
 const autoprefixer = require("gulp-autoprefixer");
 const cssmin = require("gulp-cssmin");
-
-let jsonData = require('./src/data/login/data2.json')
 const routes = {
     source: {
         hbspages: path.join(__dirname, source_folder, "pages/") + "*.hbs",
@@ -87,7 +85,7 @@ function BSYNC() {
 function HBS() {
     var templateData = {
         firstName: "Your variables goes here",
-        json: jsonData
+        // here you can add some json files
     },
         options = {
             partialsDirectory: ["./src/components/"],

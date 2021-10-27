@@ -7,14 +7,12 @@
     <link rel="stylesheet" href="./css/login/login.css">
   </head>
   <body>
-    <header class="header">
-      Hello header ! My name is Daniel
-    </header>    <div class="structure">Hello,Your variables goes here</div>
+    {{> header/header }}
+    <div class="structure">Hello,{{firstName}}</div>
 
-    
-    <div class="calendar">
-      1321
-      <footer>fasksafksafkfs</footer></div>    <img src="./assets/img/cats.jpg" alt="" srcset="">
+    {{json}}
+    {{> calendar/calendar year="1321" }}
+    <img src="./assets/img/cats.jpg" alt="" srcset="">
     <div class="tags">
       #beauty
     </div>
