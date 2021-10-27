@@ -146,10 +146,14 @@ function WATCH() {
 function JAVASCRIPT() {
     return src(routes.source.js, { read: false })
         .pipe(tap(function (file) {
-            file.contents = browserify(file.path, { debug: isDev }).transform("babelify").bundle()
-            file.basename = file.dirname.split("\\")[file.dirname.split("\\").length - 1] + ".js";
+            file.contents = browserify(file.path, { debug: isDev }).transform("babelify").bundle();
         }))
         .pipe(gulpPlumber())
+        .pipe(
+            rename(function (path) {
+                path.basename = path.dirname;
+            })
+        )
         .pipe(buffer())
         .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
         .pipe(uglify())
@@ -167,7 +171,7 @@ async function CLEAN() {
 const BUILD = series(CLEAN, SCSS, JAVASCRIPT, HBS, FONTS, IMG);
 
 
-const TASKS = parallel(BUILD, WATCH, BSYNC);
+const TASKS = isDev ? parallel(BUILD, WATCH, BSYNC) : parallel(BUILD);
 
 exports.HBS = HBS;
 exports.FONTS = FONTS;
